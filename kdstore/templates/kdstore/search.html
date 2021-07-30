@@ -1,0 +1,176 @@
+{% extends 'kdstore/base.html' %}
+{% block title %}
+Searched item
+{% endblock %}
+
+{% block css %}
+<style>
+    .title {
+        margin: 10px 0;
+    }
+
+    .products .rating .star {
+        background: #ff523b;
+        padding: 3px 5px;
+        color: white;
+    }
+
+    .products .rating i {
+        color: white;
+    }
+
+    .products .rating .rateNum {
+        padding: 3px 5px;
+    }
+
+    .prodLi {
+        border: none;
+    }
+
+    .indexProductImg {
+        padding-bottom: 5px;
+    }
+
+    .prodLi {
+        align-items: unset;
+        border-top: 3px solid oranged;
+    }
+    .searchPage .searchCategory{
+        text-align: center;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        font-size: 1.5rem;
+        border-bottom:3px solid #ff523b;
+    }
+
+
+    @media only screen and (max-width: 310px) {
+        .col-4 {
+            flex-basis: 100%;
+            min-width: 100% !important;
+        }
+    }
+
+    @media only screen and (max-width: 800px) {
+        .col-4 {
+            max-width: 30%;
+        }
+        .small-container .row{
+            padding: 0;
+        }
+    }
+
+    @media only screen and (max-width: 520px) {
+        .small-container {
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        .carousel-inner {
+            padding: 0;
+        }
+
+        .col-4 {
+            min-width: 50%;
+        }
+
+        .card-body {
+            padding: 0.5rem;
+        }
+
+        .col-2 h1 {
+            font-size: 30px;
+            line-height: 40px;
+        }
+
+        .indexPI {
+            padding: 0 10px;
+            max-height: 170px;
+            min-height: 170px;
+        }
+
+        .indexPI img {
+            max-height: 170px;
+            min-height: 170px;
+        }
+
+        .prodLi {
+            padding: 0 5px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% load static %}
+{% block body %}
+
+
+<div class="small-container searchPage">
+    {% for products, range, n, nslides in allSearch %}
+    {% if products.0.0.category %}
+    <h5 class="searchCategory">Searched Items in {{products.0.0.category}}</h5>
+    {% endif %}
+    <div class="row">
+
+
+        <div class="row prodLi">
+            {% for i in products %}
+            {% if i %}
+            <div class="col-4">
+                <div class="indexProductImg">
+                    <div class="indexPI">
+                        <a id="qv{{i.0.id}}" href="/product/{{i.0.id}}">
+                            <img class="indexPI" src="/media/{{i.0.image}}">
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p id="namepr{{i.0.id}}">{{i.0.product_name | truncatechars:50}}</p>
+                    <div class="rating mt-3">
+                        <span class="star">
+                            <i class="fa fa-star mr-2"></i>{{i.1}}</span>
+                        <span class="rateNum">({{i.2}})</span>
+                    </div>
+                    <div class="productPrice mt-2">
+                        <i class="fa fa-inr mr-2" aria-hidden="true"></i>
+                        <p class="priceTag">{{i.0.price}}</p>
+                    </div>
+                </div>
+            </div>
+
+{% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+
+{% endfor %}
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+<script>
+
+    if (localStorage.getItem('cart') == null) {
+        var cart = {};
+
+    }
+    else {
+        cart = JSON.parse(localStorage.getItem('cart'));
+    }
+    var sum = 0;
+    for (item in cart) {
+        let name = cart[item][1];
+        let qty = cart[item][0];
+        sum = sum + qty;
+
+    }
+    document.getElementById('cart').innerHTML = sum;
+
+
+
+</script>
+
+{% endblock %}

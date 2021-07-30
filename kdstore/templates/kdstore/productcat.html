@@ -1,0 +1,191 @@
+{% extends 'kdstore/base.html' %}
+{% block title %} Category Product {% endblock %}
+
+{% block css %}
+<style>
+    .title {
+        margin: 10px 0;
+    }
+
+    .footer-col-1 {
+        text-align: center;
+    }
+
+    .footerLink {
+        color: antiquewhite;
+        text-decoration: none;
+    }
+
+    .categoryProduct .rating .star {
+        background: #ff523b;
+        padding: 3px 5px;
+        color: white;
+    }
+
+    .categoryProduct .rating i {
+        color: white;
+    }
+
+    .categoryProduct .rating .rateNum {
+        padding: 3px 5px;
+    }
+    .indexProductImg{
+        padding-bottom: 5px;
+    }
+    .prodLi{
+        padding-top: 5px;
+    }
+
+
+    @media only screen and (max-width: 310px) {
+        .col-4 {
+            flex-basis: 100%;
+        }
+
+        .orderCol {
+            min-width: 0;
+        }
+
+    }
+
+    @media only screen and (max-width: 520px) {
+        .small-container {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .carousel-inner {
+            padding: 0;
+        }
+
+        .row {
+            padding: 0 !important;
+        }
+
+        .prodLi {
+            text-align: left;
+            padding: 0 !important;
+        }
+
+        .card-body {
+            padding: 0.5rem;
+        }
+
+        .col-2 h1 {
+            font-size: 30px;
+            line-height: 40px;
+        }
+
+        .orderRow {
+            padding: 1rem 0 !important;
+        }
+
+        .indexPI {
+            padding: 0 5px;
+
+        }
+        .indexProductImg img{
+            min-height: 170px;
+            max-height: 170px;
+        }
+
+    }
+
+    @media only screen and (max-width:800px) {
+        .small-container {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .categoryProduct .col-4 {
+            max-width: 40%;
+        }
+    }
+
+    @media only screen and (max-width:375px) {
+        .orderCol {
+            flex-basis: 90%;
+        }
+    }
+
+    @media only screen and (max-width:520px) {
+        .categoryProduct .col-4 {
+            min-width: 50%;
+        }
+    }
+
+    @media only screen and (max-width:320px) {
+        .categoryProduct .col-4 {
+            min-width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+{% block body %}
+
+<div class="small-container categoryProduct">
+    {% for product, range, slides in products %}
+    <h2 class="title">{{product.0.0.category}}</h2>
+
+    <div class="row prodLi">
+        {% for i in product %}
+        <div class="col-4">
+            <div class="indexProductImg">
+                <div class="indexPI">
+                    <a href="/product/{{i.0.id}}">
+                        <img class="indexPI" src="/media/{{i.0.image}}">
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="product_name">
+                    <h4 id="namepr{{i.0.id}}">{{i.0.product_name | truncatechars:50}}</h4>
+                    <div class="rating my-2">
+                        <span class="star">
+                            <i class="fa fa-star mr-2"></i>{{i.1}}</span>
+                        <span class="rateNum">({{i.2}})</span>
+                    </div>
+                    <div class="productPrice mt-2">
+                        <i class="fa fa-inr mr-2" aria-hidden="true"></i>
+                        <p class="priceTag">{{i.0.price}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      
+    {% endfor %}
+
+
+</div>
+{% endfor %}
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+
+<script>
+
+    if (localStorage.getItem('cart') == null) {
+        var cart = {};
+
+    }
+    else {
+        cart = JSON.parse(localStorage.getItem('cart'));
+    }
+    var sum = 0;
+
+    for (item in cart) {
+        let name = cart[item][1];
+        let qty = cart[item][0];
+        sum = sum + qty;
+
+    }
+    document.getElementById('cart').innerHTML = sum;
+
+
+</script>
+
+{% endblock %}

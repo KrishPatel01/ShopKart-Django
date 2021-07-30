@@ -1,0 +1,174 @@
+{% extends 'kdstore/base.html' %}
+{% block title %} Products {% endblock %}
+
+{% block css %}
+<style>
+    .title {
+        margin: 10px 0;
+    }
+
+    .footer-col-1 {
+        text-align: center;
+    }
+
+    .footerLink {
+        color: antiquewhite;
+        text-decoration: none;
+    }
+    .products .rating .star {
+        background: #ff523b;
+        padding: 3px 5px;
+        color: white;
+    }
+
+    .products .rating i {
+        color: white;
+    }
+
+    .products .rating .rateNum {
+        padding: 3px 5px;
+    }
+
+    @media only screen and (max-width: 310px) {
+        .col-4 {
+            flex-basis: 100%;
+        }
+
+        .orderCol {
+            min-width: 0;
+        }
+
+    }
+
+    @media only screen and (max-width: 520px) {
+        .small-container {
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        .carousel-inner {
+            padding: 0;
+        }
+
+        .row {
+            padding: 0 !important;
+        }
+
+        .prodLi {
+            text-align: left;
+            padding: 0 !important;
+        }
+
+        .col-4 {
+            min-width: 0 !important;
+        }
+
+        .card-body {
+            padding: 0.5rem;
+        }
+
+        .col-2 h1 {
+            font-size: 30px;
+            line-height: 40px;
+        }
+
+        .orderRow {
+            padding: 1rem 0 !important;
+        }
+
+        .indexPI {
+            padding: 0 10px;
+
+        }
+
+    }
+
+    @media only screen and (max-width:375px) {
+        .orderCol {
+            flex-basis: 90%;
+        }
+    }
+</style>
+
+{% endblock %}
+
+{% block body %}
+<div class="small-container products">
+    {% for product, range, slides in products %}
+    <h2 class="title">{{product.0.0.category}}</h2>
+    <div class="row">
+        <div id="kd{{forloop.counter}}" class="carousel slide my-3" data-bs-ride="carousel">
+            
+            <div class="container carousel-inner no-padding">
+                <div class="carousel-item active">
+                    <div class="row prodLi">
+                        {% for i in product %}
+                        <div class="col-4">
+                            <div class="indexPI">
+                                <a href="/product/{{i.0.id}}">
+                                    <img class="indexPI" src="/media/{{i.0.image}}">
+                                </a>
+                            </div>
+                            <div class="card-body">
+                                <h4 id="namepr{{i.0.id}}">{{i.0.product_name | truncatechars:50 }}</h4>
+                                <div class="rating my-2">
+                                    <span class="star"><i class="fa fa-star mr-2"></i>{{i.1}}</span><span class="rateNum">({{i.2}})</span>
+                                </div>
+                              
+                                <div class="productPrice mt-2">
+                                    <i class="fa fa-inr mr-2" aria-hidden="true"></i><p class="priceTag">{{i.0.price}}</p>
+                                </div>
+                            </div>
+                        </div>
+                      
+                        {% if forloop.counter|divisibleby:4 and forloop.counter > 0 and not forloop.last %}
+                    </div>
+                </div>
+
+                <div class="carousel-item">
+                    {% endif %}
+                    {% endfor %}
+
+                </div>
+                {% if slides > 1 %}
+                <a class="carousel-control-prev" href="#kd" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon bg-dark"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+
+                <a class="carousel-control-next" href="#kd" data-bs-slide="next">
+                    <span class="carousel-control-next-icon bg-dark"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+<script>
+    if (localStorage.getItem('cart') == null) {
+        var cart = {};
+
+    }
+    else {
+        cart = JSON.parse(localStorage.getItem('cart'));
+    }
+    var sum = 0;
+    for (item in cart) {
+        let name = cart[item][1];
+        let qty = cart[item][0];
+        sum = sum + qty;
+
+    }
+    document.getElementById('cart').innerHTML = sum;
+
+
+</script>
+
+{% endblock %}

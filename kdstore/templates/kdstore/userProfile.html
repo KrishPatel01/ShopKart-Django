@@ -1,0 +1,225 @@
+{% extends 'kdstore/base.html' %}
+{% block tittle %} user-Profile {% endblock %}
+{% block css %}
+<style>
+  .user-info {
+    background: rgb(183, 0, 255);
+    text-align: center;
+  }
+  .search{
+    background-color: #fff;
+  }
+  .UPuserImg {
+    border-radius: 50px;
+    height: 75px;
+  }
+
+  .UPanker {
+    border: none;
+  }
+
+  .UPimgSpan {
+    font-size: large;
+    margin: 0 10px;
+  }
+
+  .UPname {
+    margin-top: 30px;
+  }
+
+  .UPorderNo {
+    margin: 70px 0;
+  }
+
+  .UPboxNo {
+    text-align: center;
+  }
+  .fa-star{
+    color: #ff523b;
+  }
+
+  .UPorderTotal {
+    background-color: rgb(221, 185, 255);
+    padding: 50px 60px;
+    color: black;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: large;
+  }
+
+  .orderCard .UPorderidspan {
+    color: black;
+    font-size: 15px;
+    background: #91d7ff;
+    font: black;
+    border-radius: 5px;
+    padding: 3px;
+  }
+
+  .orderCard a {
+    text-decoration: none;
+  }
+</style>
+
+{% endblock %}
+
+{% load static %}
+{% block body %}
+
+
+
+
+
+<main role="main">
+
+  <section class="jumbotron text-center">
+    <div class="container">
+      <div class="userImg">
+        <img src="{% static 'kdstore/userM.png' %}" class="UPuserImg" style="border-radius: 50px;"
+          height="75px">
+        <span class="UPimgSpan" style="font-size: large; margin: 0 10px;">Or</span>
+        <img src="{% static 'kdstore/userF.png' %}" class="UPuserImg" style="border-radius: 50px;" height="75px">
+      </div>
+      <h3 class="UPname" style="margin-top: 30px;">{{request.user.username}}</h3>
+      <p class="lead text-muted">{{request.user.email}}
+      </p>
+      <a href="/editProfilePage/" class="btn my-2" class="UPanker"><i class="fa fa-edit mr-2"></i>Edit Profile</a>
+      </p>
+    </div>
+  </section>
+  <div class="UPorderNo" style="margin: 70px 0;">
+    <div class="row">
+      <div class="UPboxNo" style="text-align: center;">
+
+        <span class="UPorderTotal"
+          style="background-color: rgb(221, 185, 255); padding: 50px 60px; color: black; border-radius: 30px; font-weight: 600; font-size: large;">Total
+          Orders:{{orderNo}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="album py-5 bg-light">
+    <div class="container">
+      <div class="row my-4" id="itemRow">
+        {% for i in userOrder %}
+        <input type="hidden" id="itemBtn" value="{{i.orderId}}">
+        <input type="hidden" id="iteminfo" value="{{i.orderItem}}">
+        <div class="UPorderbtn" onclick="orderItem(this.id, {{i.orderItem}})" id="{{i.orderId}}">
+          <div style="text-align: center;">
+            <button class="btn" style="color: white;">{{i.orderId}}<i class="fa fa-chevron-down ml-2"
+                aria-hidden="true"></i></button>
+          </div>
+        </div>
+        <hr>
+
+
+        {% endfor %}
+      </div>
+
+
+
+    </div>
+  </div>
+
+
+
+</main>
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+  integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="/docs/4.4/assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
+<script src="/docs/4.4/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm" crossorigin="anonymous"></script>
+
+
+
+{% endblock %}
+
+{% block js %}
+
+<script>
+
+  if (localStorage.getItem('cart') == null) {
+    var cart = {};
+
+  }
+  else {
+    cart = JSON.parse(localStorage.getItem('cart'));
+  }
+  var sum = 0;
+
+  for (item in cart) {
+    let name = cart[item][1];
+    let qty = cart[item][0];
+    sum = sum + qty;
+
+  }
+  document.getElementById('cart').innerHTML = sum;
+  var proId = 0;
+  function orderItem(orderid, itemParse) {
+    var mystr = '';
+    for (item in itemParse) {
+      let qty = itemParse[item][1];
+      let name = itemParse[item][0];
+      let productId = itemParse[item][2];
+      proId = productId;
+      let productPrice = itemParse[item][3];
+      mystr = mystr + `<div class="col-md-12 orderCard">
+          <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+              <span class="UPorderidspan" style="    color: black;
+    font-size: 15px;
+    background: #91d7ff;
+    font: black;
+    border-radius: 5px;
+    padding: 3px;
+    ">Order Id:${orderid}</span>
+    <small class="text-muted mx-2"></small>
+        <a href="/product/${productId}" style="text-decoration: none;">
+              <p class="card-text my-2" style="color: black;">${name}</p>
+            </a>
+              <div class="d-flex justify-content-between align-items-center">
+                </div>
+                <p>Price: ${productPrice}</p>
+              
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Quantity</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">${qty}</button>
+                </div>
+                <form action="/productRating/" id="ratingForm${productId}" method="POST">
+                  {% csrf_token %}
+                  <input type="hidden" value="${productId}" name="productId">
+                  <input type="hidden" id="rating${productId}" name="rating"> 
+                  <div class="ratings mt-3">
+                    <p class="card-text">Rate your product:</p>
+                    <i class="fa fa-star" id="rat1${productId}" onclick="rating(1, this.id)"></i>
+                    <i class="fa fa-star" id="rat2${productId}" onclick="rating(2, this.id)"></i>
+                    <i class="fa fa-star" id="rat3${productId}" onclick="rating(3, this.id)"></i>
+                    <i class="fa fa-star" id="rat4${productId}" onclick="rating(4, this.id)"></i>
+                    <i class="fa fa-star" id="rat5${productId}" onclick="rating(5, this.id)"></i>
+
+                </div>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>`
+    }
+    document.getElementById(orderid).innerHTML = mystr;
+    $('#' + orderid).prop("onclick", null).off("click");
+  }
+
+  function rating(n, rate) {
+    var pid = rate.slice(4,);
+    proRate = 'rating' + pid;
+    document.getElementById(proRate).value = n;
+    document.getElementById(rate).style.color = 'blue';
+    document.getElementById(rate).style.fontSize = '20px';
+    let form = 'ratingForm' + pid;
+    document.getElementById(form).submit();
+  }
+ 
+</script>
+{% endblock %}

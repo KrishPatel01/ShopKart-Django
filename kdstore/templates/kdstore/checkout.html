@@ -1,0 +1,211 @@
+{% extends 'kdstore/base.html' %}
+{% block title %}checkout{% endblock %}
+{% block css %}
+<style>
+#country, #state{
+height: auto;
+}
+.checkout .fa-inr{
+    display: contents !important;
+}
+.checkout .title{
+    margin:0;
+}
+.checkout .text-center{
+    padding-top: 30px;
+}
+.COcartItem{
+    background-color: #EEEEEE;
+}
+.checkout .COrow{
+    align-items: unset;
+}
+.checkout .form-select{
+    height: auto;
+}
+.checkout #itemList .itemInfo{
+    text-align: left;
+}
+.checkout .itemInfo span{
+    border-radius: 50%; 
+    background: #0d6efd; 
+    color: white; 
+    padding: 1px 4px;
+}
+@media only screen and (max-width:500px){
+    .checkout .text-center{
+        padding-top:1rem;
+    }
+}
+
+</style>
+{% endblock %}
+{% block body %}
+<div class="container checkout">
+    <h1 class="head mt-2 title">Checkout Items</h1>
+    <main>
+        <div class="text-center">
+            <div class="row COrow g-5">
+                <div class="col-md-5 col-lg-4 order-md-last COcartItem">
+                    <h4 class="d-flex justify-content-between align-items-center my-3">
+                        <span class="text-primary">Your cart</span>
+                        <span class="badge bg-primary rounded-pill" id="cartQuantity"></span>
+                    </h4>
+                    <ul class="list-group mb-3" class="itemList" id="itemList">
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span><strong>Total:</strong></span>
+                            <strong id="total"></strong>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-7 col-lg-8">
+                    <h4 class="mb-3">Billing address</h4>
+                    {% csrf_token %}
+                    <form action="/order/" method="POST" class="needs-validation">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <div class="input-group has-validation">
+                                    <input type="hidden" class="form-control" name="amount" id="amount">
+                                    <input type="hidden" class="form-control" name="orderItem" id="orderItem">
+                                    <input type="hidden" class="form-control" name="orderId" id="orderId">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label for="email" class="form-label">Email 
+                                    </label>
+                                <input type="email" name="email" class="form-control" id="email" placeholder="you@example.com">
+                                <div class="invalid-feedback">
+                                    Please enter a valid email address for shipping updates.
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="address" class="form-label">Address</label>
+                                <input type="text" name="address" class="form-control" id="address" placeholder="1234 Main St"
+                                    required>
+                                <div class="invalid-feedback">
+                                    Please enter your shipping address.
+                                </div>
+                            </div>
+
+                            <div class="col-md-5">
+                                <label for="number" class="form-label">Phone No.</label>
+                                <input type="text" name="phoneNo" class="form-control" id="phoneNo" placeholder="0123456789"
+                                    required>
+                                <div class="invalid-feedback">
+                                    Please enter your phone number.
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="state" class="form-label">State</label>
+                                <select name="state" class="form-select mt-0" id="state" required>
+                                    <option value="">Choose...</option>
+                                    <option>Gujarat</option>
+                                    <option>Maharashtra</option>
+                                    <option>karnataka</option>
+                                    <option>tamilnadu</option>
+                                    <option>Delhi</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please provide a valid state.
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="zip" class="form-label">Zip</label>
+                                <input name="zip" type="text" class="form-control" id="zip" placeholder="" required>
+                                <div class="invalid-feedback">
+                                    Zip code required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        {% csrf_token %}
+                        <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+                    </form>
+                </div>
+            </div>
+    </main>
+
+
+</div>
+{% endblock %}
+
+{% block js %}
+
+<script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="form-validation.js"></script>
+<script>
+
+    if (localStorage.getItem('cart') == null) {
+        var cart = {};
+    } else {
+        cart = JSON.parse(localStorage.getItem('cart'));
+    }
+    var items = 0;
+    for (item in cart) {
+        let name = cart[item][1];
+        let qty = cart[item][0];
+        items = items + qty;
+
+    }
+    document.getElementById('cart').innerHTML = items;
+
+    var cartQuantity = 0;
+    var total = 0;
+    var orderItem = {}
+    for (item in cart) {
+        let itemQuantity = cart[item][0];
+        let name = cart[item][1];
+        let itemPrice = cart[item][2];
+        let quantPrice = itemPrice * itemQuantity;
+        let qid = cart[item][3];
+        let idstr = 'pr' + qid.slice(1, );
+        let prodImage = cart[item][4];
+        let productsId = cart[item][5];
+        cartQuantity = cartQuantity + itemQuantity;
+        total = total + quantPrice;
+        item = `<li class="list-group-item d-flex justify-content-between lh-sm">
+                            <div class="itemInfo">
+                                <h6 class="my-1 mr-3" id="itemName">${name}</h6>
+                                <span id="itemQuantity">
+                                    ${itemQuantity}</span>
+                            </div>
+                            <span class="text-muted" id="itemPrice"><i class="fa fa-inr mr-2" aria-hidden="true"></i>${quantPrice}</span>
+                        </li>`;
+        $('#itemList').append(item);
+        orderItem[idstr]= [name, itemQuantity, productsId, itemPrice];
+    }
+    document.getElementById('cartQuantity').innerText = cartQuantity;
+    document.getElementById('total').innerHTML = '<i class="fa fa-inr mr-2" aria-hidden="true"></i>' + total;
+
+    $('#amount').val(total);
+    $('#orderItem').val(JSON.stringify(orderItem));
+
+
+    (function () {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+
+</script>
+{% endblock %}

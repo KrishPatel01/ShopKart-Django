@@ -1,0 +1,444 @@
+{% extends 'kdstore/base.html' %}
+{% block title %} Home {% endblock %}
+
+{% block css %}
+
+<style>
+    .title {
+        margin: 10px 0;
+    }
+
+    .footer-col-1 {
+        text-align: center;
+    }
+
+    .footerLink {
+        color: #c1c1c1;
+        text-decoration: none;
+    }
+
+    .indexFooterUL {
+        padding-left: 0;
+    }
+
+    .indexProdIcon {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .fa-mobile {
+        font-size: 5em;
+    }
+
+    .indexProducts img {
+        width: 80px;
+    }
+
+    .indexProducts ul {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: flex-end;
+        padding: 10px;
+    }
+
+    .prodLi {
+        border-bottom: none;
+        padding: 5px;
+    }
+
+    .indexProducts a {
+        text-decoration: none;
+        color: black;
+    }
+
+    .card-body {
+        padding: 0.5rem;
+    }
+
+    .offerCol {
+        min-width: 50%;
+    }
+
+    .categoryLabel {
+        margin-top: 20px;
+    }
+
+    .categoryLabel span {
+        font-size: 1.5rem;
+    }
+
+    .indexProductImg {
+        padding-bottom: 5px;
+    }
+
+
+
+
+    .homePage .offer .col-2 {
+        min-width: 0;
+        text-align: center;
+        padding: 10px 5px;
+        max-height: 300px;
+        min-height: 300px;
+    }
+
+    .homePage .offer .col-2 img {
+        max-height: 250px;
+        object-fit: contain;
+        padding: 0;
+    }
+
+    .homePage .offer .offerRow {
+        margin: 0;
+    }
+
+    .homePage .offer .shopbtn {
+        margin: 0 !important;
+    }
+
+    .homePage .offer .small-container {
+        padding: 5px;
+    }
+
+    .homePage .offer .offerCol {
+        min-width: 50%;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: center;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @media only screen and (max-width: 800px) {
+        .col-4 {
+            max-width: 35%;
+        }
+
+        .small-container {
+            padding: 10px;
+        }
+    }
+
+    @media only screen and (max-width: 310px) {
+        .col-4 {
+            flex-basis: 100%;
+            max-width: 100%;
+        }
+
+        .offerCol {
+            min-width: 100%;
+        }
+
+    }
+
+    @media only screen and (max-width: 350px) {
+        .homePage .offer .offerCol {
+            max-width: 100%;
+            max-height: 200px !important;
+            min-height: 200px !important;
+            flex-direction: unset;
+        }
+
+        .homePage .offer .col-2 img {
+            max-height: 190px;
+        }
+    }
+
+    @media only screen and (max-width: 520px) {
+        .small-container {
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        .indexProducts img {
+            width: 50px;
+        }
+
+        .pointer-event {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .offer h2 {
+            font-size: 20px;
+        }
+
+        .col-4 {
+            padding-right: 0;
+            padding-left: 0;
+            max-width: 50%;
+        }
+
+        .card-body {
+            padding: 0.5rem;
+        }
+
+        .col-2 h1 {
+            font-size: 30px;
+            line-height: 40px;
+        }
+
+        .offerCol h5 {
+            font-size: 1rem;
+        }
+
+        .offerRow {
+            padding: 0.5rem 0 !important;
+        }
+
+        .offer .small-container {
+            padding: 0 5px;
+        }
+
+        .indexPI {
+            padding: 0 10px;
+            max-height: 170px;
+            min-height: 170px;
+        }
+
+        .indexProductImg img {
+            min-height: 170px;
+            max-height: 170px;
+        }
+
+    }
+
+    @media only screen and (max-width:375px) {
+        .offerCol {
+            flex-basis: 90%;
+        }
+
+        .indexProducts span {
+            font-size: 12px;
+        }
+    }
+</style>
+
+{% endblock %}
+
+{% block body %}
+{% load static %}
+<div class="homePage">
+    <div class="indexProducts">
+        <ul>
+            <li><a href="/categoryProduct/Mobiles">
+                    <div class="indexProdIcon"><img
+                            src="{% static 'kdstore/samsung-galaxy-s21ultra-5g-phantom-black-usp.png' %}"><span>Mobiles</span>
+                    </div>
+                </a></li>
+            <li><a href="/categoryProduct/Electronics">
+                    <div class="indexProdIcon"><img
+                            src="{% static 'kdstore/electronics6.png' %}"><span>Electronics</span>
+                    </div>
+                </a></li>
+            <li><a href="/categoryProduct/Appliances">
+                    <div class="indexProdIcon"><img src="{% static 'kdstore/appliance1.png' %}"><span>Appliances</span>
+                    </div>
+                </a></li>
+            <li><a href="/categoryProduct/Fashion">
+                    <div class="indexProdIcon"><img src="{% static 'kdstore/fashion.png' %}"><span>Fashion</span></div>
+                </a></li>
+        </ul>
+    </div>
+
+    <!-- --------------product slider----------------- -->
+    <div class="offer">
+        {% for offer, range in offers %}
+        <div class="row">
+            <div id="kd{{forloop.counter}}" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-bs-target="#kd{{forloop.counter}}" data-bs-slide-to="0" class="active bg-dark"></li>
+                    {% for i in range %}
+                    <li data-bs-target="#kd{{forloop.parentloop.counter}}" data-bs-slide-to="{{i}}" class="bg-dark">
+                    </li>
+                    {% endfor %}
+                </ol>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        {% for i in offer %}
+                        <div class="small-container">
+                            <div class="row offerRow">
+                                <div class="col-2 offerCol">
+                                    <a href="/product/{{i.product.id}}"><img class="offerImg"
+                                            src="media/{{i.image}}"></a>
+                                </div>
+                                <div class="col-2 offerCol">
+                                    <h2>{{i.head1}}</h2>
+                                    <h5>{{i.head2}}</h5>
+                                    <a type="button" class="btn" href="/product/{{i.product.id}}"> Shop Now </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% if forloop.counter|divisibleby:1 and forloop.counter > 0 and not forloop.last %}
+
+                    </div>
+                    <div class="carousel-item">
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <a class="carousel-control-prev" href="#kd{{forloop.counter}}" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#kd{{forloop.counter}}" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+
+    </div>
+
+    <!-- -------------new product------------- -->
+
+    <div class="small-container">
+        <div class="titlehead">
+            <h2 class="title" id="titleIndex">Featured Product</h2>
+        </div>
+        {% for products in product %}
+        <div class="categoryLabel">
+            {% if products.0.0.category %}
+            <span>{{products.0.0.category}}</span>
+            <a href="/categoryProduct/{{products.0.0.category}}"><i class="fa fa-arrow-right ml-2"></i></a>
+            {% endif %}
+        </div>
+        <div class="row prodLi">
+
+            {% for i in products %}
+            <div class="col-4">
+                <div class="indexProductImg">
+                    <div class="indexPI">
+                        <a id="qv{{i.0.id}}" href="/product/{{i.0.id}}">
+                            <img class="indexPI" src="/media/{{i.0.image}}">
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="product_name">
+                        <h4 id="namepr{{i.0.id}}">{{i.0.product_name | truncatechars:45 }}</h4>
+                        <div class="rating my-2">
+                            <span style="background: #ff523b; padding: 3px 5px; color: white;"><i
+                                    class="fa fa-star mr-2" style="color: white;"></i>{{i.1}}</span><span
+                                style="padding: 3px 5px;">({{i.2}})</span>
+                        </div>
+
+                        <div class="productPrice mt-2">
+                            <i class="fa fa-inr mr-2" aria-hidden="true"></i>
+                            <p class="priceTag">{{i.0.price}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- -----------Highlighted product----------- -->
+    <div class="offer">
+        <div class="small-container">
+            <div class="row offerRow">
+                <div class="col-2 offerCol">
+                    <a href="/product/1"><img class="offerImg"
+                            src="{% static 'kdstore/samsung-galaxy-s21ultra-5g-phantom-black-usp.png' %}"></a>
+                </div>
+                <div class="col-2 offerCol">
+                    <h2>Samsung Galaxy S21 Ultra 5G</h2>
+                    <h5>108MP Camera | 8K Video Snap</h5>
+                    <a type="button" class="btn" href="/product/1"> Shop Now </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <footer>
+        <div class="footer">
+            <div class="small-container">
+                <div class="row">
+                    <div class="footer-col-1">
+                        <h3>Download Our App</h3>
+                        <p>Download app on android and ios phones (Coming soon...)</p>
+                        <div class="app-logo">
+                            <img src="{% static 'kdstore/google-play-badge.png' %}" class="app-logo">
+                            <img src="{% static 'kdstore/apple-store-logo-4.png' %}" class="app-logo">
+                        </div>
+                    </div>
+                    <div class="footer-col-2">
+                        <img src="{% static 'kdstore/TechStore_Logo.jpg' %}">
+                        <p>Explore your store now.</p>
+                    </div>
+                    <div class="footer-col-3">
+                        <h3>Usefull links</h3>
+                        <ul class="indexFooterUL">
+                            <li><a class="footerLink" href="/offers/">Offers</a></li>
+                            <li><a class="footerLink" href="/contactUs/">Contact Us</a></li>
+                            <li><a class="footerLink" href="/about/">About Us</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col-4">
+                        <h3>Follow Us</h3>
+                        <ul class="indexFooterUL">
+                            <li><a class="footerLink">Facebook</a></li>
+                            <li><a class="footerLink">Twitter</a></li>
+                            <li><a class="footerLink">Instagram</a></li>
+                            <li><a class="footerLink">Google</a></li>
+                        </ul>
+
+                    </div>
+                </div>
+                <hr>
+            </div>
+        </div>
+    </footer>
+</div>
+{% endblock %}
+
+{% block js %}
+
+<script>
+    // create local storage
+
+    if (localStorage.getItem('cart') == null) {
+        var cart = {};
+
+    }
+    else {
+        cart = JSON.parse(localStorage.getItem('cart'));
+    }
+    var sum = 0;
+
+    for (item in cart) {
+        let name = cart[item][1];
+        let qty = cart[item][0];
+        sum = sum + qty;
+
+    }
+    document.getElementById('cart').innerHTML = sum;
+
+
+
+</script>
+
+{% endblock %}

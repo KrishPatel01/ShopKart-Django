@@ -1,0 +1,47 @@
+{% extends 'kdstore/base.html' %}
+
+{% block title %} Payment-status-info {% endblock %}
+
+{% block body %}
+<div class="conainer text-center">
+
+<h1 class="title">
+    {% if response_info.RESPCODE == '01' %}
+    Order Successful
+    {% else %}
+    Order Fail
+    {% endif %}
+</h1>
+<table>
+    <tr>
+        <th>Amount Pay</th>
+        <td>{{response_info.TXNAMOUNT}}</td>
+    </tr>
+    <tr>
+        <th>Order Id</th>
+        <td>{{response_info.ORDERID}}</td>
+    </tr>
+    <tr>
+        <th>Payment Status</th>
+        <td id="paymentSuccess">{{response_info.STATUS}}</td>
+    </tr>
+    <tr>
+        <th>Payment Date</th>
+        <td>{{response_info.TXNDATE}}</td>
+    </tr>
+
+</table>
+</div>
+{% endblock %}
+
+<!-- {% block js %}
+
+<script>
+    if($('#paymentSuccess').html = 'TXN_SUCCESS'){
+        cart = JSON.parse(localStorage.getItem(cart));
+        localStorage.clear();
+        cart={}
+    }
+</script> 
+
+{% endblock %} -->

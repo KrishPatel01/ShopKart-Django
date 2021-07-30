@@ -1,0 +1,95 @@
+{% extends 'kdstore/base.html' %}
+
+{% block title %} {{prodInfo.slug}} {% endblock %}
+
+{% block css %}
+<style>
+    .moreComments{
+        max-width: 800px;
+    }
+    .moreComments img{
+        width: 35px;
+        margin: 9px 9px 5px 5px;
+        border-radius: 50%;
+    }
+    </style>
+{% endblock %}
+
+{% block body %}
+{% load static %}
+{% load humanize %}
+
+<div class="container moreComments bg-light my-4">
+    <strong>
+        <h4>Reviews ({{comments.count}})</h4>
+    </strong>
+    
+    <section class="content-item" id="comments">
+        <div class="container">
+
+            {% if user.is_authenticated%}
+            <form action="/productComment/" method="post">{% csrf_token %}
+                <input type="text" class="form-control" name="comment" placeholder="comment here" required>
+                <input type="hidden" name="productSno" value="{{prodInfo.id}}">
+                <input type="hidden" name="parentSno" value="">
+                <button type="submit" class="btn btn-primary mt-2">submit</button>
+            </form>
+            {% else %}
+            <h6 class="my-3"><i>Please login to post a comment</i></h6>
+            {% endif %}
+
+
+        </div>
+
+
+    </section>
+    {% for comment in comments %}
+    <div class="row comments">
+        <ul class="media-list">
+            <li class="media">
+                <a href="#" class="pull-left">
+                    <img src="{% static 'kdstore/822711_user_512x512.png' %}" alt="user" class="img-circle">
+                </a>
+                <div class="media-body">
+                    <span class="text-muted pull-right">
+                        <small class="text-muted">{{comment.timeStamp| naturaltime}}</small>
+                    </span>
+                    <strong class="text-success">{{comment.user.username}}</strong>
+                    <p>{{comment.comment}}
+                    </p>
+              
+
+                </div>
+            </li>
+
+
+        </ul>
+    </div>
+    {% endfor %}
+
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+<script>
+// For No. of item in cart
+if (localStorage.getItem('cart') == null) {
+    var cart = {};
+
+}
+else {
+    cart = JSON.parse(localStorage.getItem('cart'));
+}
+var sum = 0;
+
+for (item in cart) {
+    let name = cart[item][1];
+    let qty = cart[item][0];
+    sum = sum + qty;
+
+}
+document.getElementById('cart').innerHTML = sum;
+</script>
+{% endblock %}

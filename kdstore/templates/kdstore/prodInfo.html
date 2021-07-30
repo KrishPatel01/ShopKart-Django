@@ -1,0 +1,279 @@
+{% extends 'kdstore/base.html' %}
+
+{% block title %} {{prodInfo.product_name}} {% endblock %}
+
+
+{% block css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100&display=swap" rel="stylesheet">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+    body {
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .container .lab .col-2 {
+        display: none;
+    }
+
+    .container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .productInfoContent {
+        max-width: 1080px;
+    }
+
+    .productInfo .prodRow {
+        align-items: unset;
+    }
+    .productInfo .prodRow .col-2-img img{
+        max-height: 400px;
+    }
+
+    .productInfo .col-2-img {
+        padding-top: 30px;
+    }
+
+    .productInfo .productTitleHead {
+        font-size: 20px;
+        color: #007185;
+    }
+
+    .productInfo .rating .star {
+        background: #ff523b;
+        padding: 3px 5px;
+        color: white;
+    }
+
+    .productInfo .rating .rateNum {
+        padding: 3px 5px;
+    }
+
+    .productInfo .rating i {
+        color: white;
+    }
+
+    .productInfo .productDetailHead {
+        font-weight: bold;
+    }
+
+    .productInfo .productDesc {
+        font-size: 15px;
+    }
+
+    .small-container {
+        padding-left: 10px;
+        padding-right: 10px;
+        max-width: none;
+    }
+
+    .col-2-img {
+        text-align: center;
+    }
+
+    .productInfo .details {
+        min-width: 50%;
+    }
+
+    .PIimg {
+        max-width: 300px;
+        width: 100%;
+        object-fit: contain;
+    }
+
+    .productInfo .Productcomments {
+        padding: 10px 50px;
+        background-color: #f9f6ff;
+    }
+
+    .productInfo .Productcomments .commentsImg {
+        width: 35px;
+        margin: 9px 9px 5px 5px;
+        border-radius: 50%;
+    }
+
+    .productInfo .Productcomments .loadCommentsBtn {
+        text-decoration: none;
+    }
+
+    .productInfo .Productcomments .loadComments {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+    .productInfo .productDesc ul{
+        list-style-type: disc;
+    }
+
+    @media only screen and (max-width:800px) {
+        .productInfoContent {
+            margin: 10px;
+        }
+
+        .col-2-img {
+            flex-basis: 100%;
+        }
+
+        .productInfo .details {
+            flex-basis: 100%;
+            min-width: 80%;
+        }
+    }
+
+    @media only screen and (max-width:500px) {
+        .col-2-img {
+            width: 80%;
+            margin: 0;
+        }
+        .productInfo .details{
+            min-width: 100%;
+        }
+
+        .small-container {
+            padding: 0;
+            margin: 0;
+        }
+    }
+</style>
+{% endblock %}
+
+
+
+{% block body %}
+{% load static %}
+{% load humanize %}
+{% load get_value %}
+<div class="small-container my-3 productInfo">
+    <div class="productInfoContent">
+        <div class="row prodRow">
+            <div class="col-2-img">
+                <img src="/media/{{prodInfo.image}}" id="imgpr{{prodInfo.id}}" class="PIimg">
+            </div>
+            <div class="col-2 details">
+                <div class="productTitle">
+                    <input type="hidden" value="i{{prodInfo.id}}" id="ipr{{prodInfo.id}}">
+                    <h6 id="namepr{{prodInfo.id}}" class="productTitleHead">{{prodInfo.product_name}}</h6>
+                </div>
+                <div class="rating my-3">
+                    <span class="star"><i class="fa fa-star mr-2"></i>{{total}}</span><span
+                        class="rateNum">({{totalRate}})</span>
+                </div>
+                <div><i class="fa fa-inr mr-2" aria-hidden="true"></i><span
+                        id="pricepr{{prodInfo.id}}">{{prodInfo.price}}</span></div>
+                <hr>
+                <div class="productDetails">
+                    <p class="productDetailHead">Details:</p>
+                    <desc class="productDesc">{{prodInfo.description|safe}}
+                    </desc>
+                </div>
+                <span id="divpr{{prodInfo.id}}" class="divpr">
+                    <button id="pr{{prodInfo.id}}" class="btn my-3 acart">Add to cart</button>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container Productcomments my-4">
+        <strong>
+            <h4>Reviews ({{comments.count}})</h4>
+        </strong>
+
+        <section class="content-item" id="comments">
+            <div class="container">
+
+                {% if user.is_authenticated%}
+                <form action="/productComment/" method="post">{% csrf_token %}
+                    <input type="text" class="form-control" name="comment" placeholder="comment here" required>
+                    <input type="hidden" name="productSno" value="{{prodInfo.id}}">
+                    <input type="hidden" name="parentSno" value="">
+                    <button type="submit" class="btn btn-primary mt-2">submit</button>
+                </form>
+                {% else %}
+                <h6 class="my-3"><i>Please login to post a comment</i></h6>
+                {% endif %}
+
+
+            </div>
+
+
+        </section>
+        {% for comment in comments|slice:"0:3" %}
+        <div class="row comments my-2">
+            <ul class="media-list my-2">
+                <li class="media">
+                    <a href="#" class="pull-left">
+                        <img src="{% static 'kdstore/822711_user_512x512.png' %}" alt="user"
+                            class="img-circle commentsImg">
+                    </a>
+                    <div class="media-body">
+                        <span class="text-muted pull-right">
+                            <small class="text-muted">{{comment.timeStamp| naturaltime}}</small>
+                        </span>
+                        <strong class="text-success">{{comment.user.username}}</strong>
+                        <p>{{comment.comment}}
+                        </p>
+
+                    </div>
+                </li>
+
+
+            </ul>
+        </div>
+        {% endfor %}
+        {% if comments|length > 3 %}
+        <div class="loadComments">
+            <a type="button" class="btn loadCommentsBtn" href="/moreComments/{{prodInfo.id}}">Load comments</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+<script>
+
+    if (localStorage.getItem('cart') == null) {
+        var cart = {};
+
+    }
+    else {
+        cart = JSON.parse(localStorage.getItem('cart'));
+        updateCart(cart);
+    }
+
+    $('.divpr').on('click', 'button.acart', function () {
+        var idstr = this.id.toString();
+        if (cart[idstr] != undefined) {
+            qty = cart[idstr][0] + 1;
+        }
+        else {
+            qty = 1;
+            productName = document.getElementById('name' + idstr).innerHTML;
+            price = document.getElementById('price' + idstr).innerHTML;
+            qid = document.getElementById('i' + idstr).value;
+            productImage = document.getElementById('img' + idstr).src;
+            productId = idstr.slice(2,);
+            cart[idstr] = [qty, productName, parseInt(price), qid, productImage, parseInt(productId)];
+        }
+        document.getElementById(idstr).innerHTML = `<a href="/cart/"><button class="btn btn-sm acart">Go To Cart</button></a>`;
+
+        updateCart(cart);
+    });
+    function updateCart(cart) {
+        var sum = 0;
+        for (var item in cart) {
+            sum = sum + cart[item][0];
+        }
+        localStorage.setItem('cart', JSON.stringify(cart));
+        document.getElementById('cart').innerHTML = sum;
+    }
+
+
+</script>
+
+{% endblock %}

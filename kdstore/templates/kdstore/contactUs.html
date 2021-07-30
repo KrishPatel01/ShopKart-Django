@@ -1,0 +1,90 @@
+{% extends 'kdstore/base.html' %}
+{% block title %} Contact Us {% endblock %}
+{% block css %}
+<style>
+    .contact{
+        text-align: -webkit-center;
+    }
+    .contact form{
+        background-color: rgb(146, 146, 146);
+        padding: 15px;
+        max-width: 500px;
+    }
+    .contact input{
+        padding: 7px 13px;
+        line-height: 25px;
+        margin: 10px 0;
+        width: 100%;
+        border: none;
+        border-radius: 10px;
+    }
+    .contact textarea{
+        padding: 7px 13px;
+        border-radius: 10px;
+        width: 100%;
+        margin: 10px 0;
+        height: 160px;
+    }
+    .contact textarea:focus{
+        outline: none;
+    }
+
+</style>
+{% endblock %}
+
+
+
+{% block body %}
+<div class="container contact" style="margin-bottom: 35px;">
+
+    <h1 class="title">Contact</h1>
+
+    <form id="form" action="/contactUs/" method="post">{% csrf_token %}
+            <input class="in" type="text" name="name" placeholder="Name" required/>
+      
+    
+
+            <input class="in" type="email" name="email" placeholder="Email" required/>
+
+
+
+            <input class="in" type="tel" name="phone" placeholder="Phone No." required/>
+
+
+            <input class="in" type="text" name="subject" placeholder="Subject" required/>
+
+
+            <textarea class="in" type="text" name="message" placeholder="Enter Your Message..." required></textarea>
+  
+
+          <button type="submit" class="btn">Submit</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block js %}
+
+<script>
+// For No. of item in cart
+    if (localStorage.getItem('cart') == null) {
+        var cart = {};
+
+    }
+    else {
+        cart = JSON.parse(localStorage.getItem('cart'));
+    }
+    var sum=0;
+
+    for (item in cart) {
+        let name = cart[item][1];
+        let qty = cart[item][0];
+        sum = sum + qty;
+
+    }
+    document.getElementById('cart').innerHTML = sum;
+
+
+
+</script>
+
+{% endblock %}

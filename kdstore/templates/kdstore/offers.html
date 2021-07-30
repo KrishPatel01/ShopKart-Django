@@ -1,0 +1,81 @@
+{% extends 'kdstore/base.html' %}
+{% block title %} Offers {% endblock %}
+
+{% block css %}
+<style>
+    .col-2{
+        min-width: 0;
+        text-align: center;
+        padding: 10px 5px;
+    }
+    .col-2 img{
+        max-height: 250px;
+        object-fit: contain;
+        padding: 0;
+    }
+    
+    .offerRow{
+        margin: 0;
+    }
+    .offer{
+        background: radial-gradient(rgb(255, 255, 255), #f0e1ff);
+        margin-bottom: 20px;
+        margin-top: 10px;                                                               
+    }
+ 
+    .shopbtn{
+        margin: 0 !important;
+    }
+    .small-container{
+        padding: 5px;
+    }
+    .offerCol{
+        min-width: 50%;
+    }
+    @media only screen and (max-width: 500px){
+        h2{
+        font-size: 20px;
+    }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+{% for offer in offers %}
+<div class="small-container">
+    <div class="offer">
+            <div class="row offerRow">
+                <div class="col-2 offerCol">
+                    <a href="/product/{{offer.product.id}}"><img class="offerImg" src="/media/{{offer.image}}"></a>
+                </div>
+                <div class="col-2 offerCol">
+                    <h2>{{offer.head1}}</h2>
+                    <p>{{offer.head2}}</p>
+                    <a type="button" class="shopbtn btn" href="/product/{{offer.product.id}}"> Shop Now </a>
+                </div>
+            </div>
+        </div>
+    </div>
+ {% endfor %}
+ {% endblock %}
+ {% block js %}
+<script>
+// For No. of item in cart
+if (localStorage.getItem('cart') == null) {
+    var cart = {};
+
+}
+else {
+    cart = JSON.parse(localStorage.getItem('cart'));
+}
+var sum = 0;
+
+for (item in cart) {
+    let name = cart[item][1];
+    let qty = cart[item][0];
+    sum = sum + qty;
+
+}
+document.getElementById('cart').innerHTML = sum;
+</script>
+{% endblock %}

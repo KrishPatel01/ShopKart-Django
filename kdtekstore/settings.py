@@ -25,7 +25,7 @@ SECRET_KEY = 'kzst_j25@p+*389rzmi^mpxd0kmlcn8^q_o&r&hy_3t0(x1o8l'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['shopkart-django.onrender.com']
 
 
 # Application definition
